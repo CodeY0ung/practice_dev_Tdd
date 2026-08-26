@@ -1,6 +1,7 @@
 package test.demo;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -75,12 +76,15 @@ public class AccountTest {
     }
 
     @Test
-    void cannotOverAllTest(){
+    @DisplayName("잔액 보다 큰 금액을 출금할 수 없다.")
+    void cannotWithdrawOverBalanceTest(){
 
-        assertThrows(
+        IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> account.withdraw(10001)
         );
+
+        assertEquals("잔액이 부족합니다.",exception.getMessage());
     }
 
     @Test
@@ -94,12 +98,16 @@ public class AccountTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0,-1,-1000,-10000})
-    void cannotAmountNegative(int amount){
+    @DisplayName("출금 금액은 0보다 커야한다")
+    void withdrawBiggerThanZero(int amount){
 
-        assertThrows(
+
+        IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> account.withdraw(amount)
         );
+
+        assertEquals("출금 금액은 0보다 커야합니다.", exception.getMessage());
     }
 
 }
