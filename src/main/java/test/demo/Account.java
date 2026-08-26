@@ -1,0 +1,45 @@
+package test.demo;
+
+public class Account {
+    //잔액
+    private int balance;
+
+    //생성자
+    public Account(int balance){
+        this.balance = balance;
+    }
+
+    //잔액출력
+    public int getBalance(){
+        return balance;
+    }
+
+    // 입금
+    public void deposit(int amount){
+
+        if(amount == 0){
+            throw new IllegalArgumentException();
+        }
+        if(amount < 0){
+            throw new IllegalArgumentException();
+        }
+
+
+        balance += amount;
+    }
+
+    // 출금
+    public void withdraw(int amount){
+
+        if(amount > balance){
+            throw new IllegalArgumentException();
+        }
+
+        if(amount <= 0){
+            throw new IllegalArgumentException();
+        }
+
+        balance -= amount;
+    }
+
+}
