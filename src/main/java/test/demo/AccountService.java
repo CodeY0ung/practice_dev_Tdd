@@ -1,13 +1,13 @@
 package test.demo;
 
 public class AccountService {
-
     private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
     }
 
+    // 회원 조회
     public Account getAccount(Long id){
         Account account = accountRepository.findById(id);
 
@@ -16,5 +16,10 @@ public class AccountService {
         }
 
         return account;
+    }
+
+    // 회원 등록
+    public void createAccount(Account account){
+        accountRepository.save(account);
     }
 }

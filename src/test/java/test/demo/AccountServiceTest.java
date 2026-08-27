@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +46,11 @@ public class AccountServiceTest {
         Account result = accountService.getAccount(1l);
 
         // then
+        // 결과 검증
         assertThat(result).isEqualTo(account);
+
+        // 행동 검증
+        verify(accountRepository).findById(1l);
     }
 
     @Test
@@ -62,6 +67,18 @@ public class AccountServiceTest {
         assertThatThrownBy(()->accountService.getAccount(1l))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("계좌가 없습니다");
+
+        verify(accountRepository).findById(1l);
+    }
+
+    @Test
+    @DisplayName("계좌를 등록 할 수 있다")
+    void createAccountTest(){
+        // given
+        // BeforeEach
+
+        // when
+
     }
 
 }
