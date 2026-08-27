@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,6 +21,7 @@ public class AccountTest {
     }
 
     @Test
+    @DisplayName("입금한 금액 만큼 잔액이 증가한다.")
     void depositTest(){
         // given
         // 초기값 10000인 account 객체 새로 자동 생성
@@ -27,7 +30,8 @@ public class AccountTest {
         account.deposit(5000);
 
         // then
-        assertEquals(15000,account.getBalance());
+        assertThat(account.getBalance())
+                .isEqualTo(15000);
     }
 
     @Test
@@ -36,22 +40,22 @@ public class AccountTest {
         // 초기값 10000인 account 객체 새로 자동 생성
 
         //when && then
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> account.deposit(0)
-        );
+        assertThatThrownBy(()->account.deposit(0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입금액은 0원 이상이어야 합니다.");
     }
 
-    @Test
-    void cannotDepositNegative(){
+    @ParameterizedTest
+    @ValueSource(ints = {-1,-100,-1000})
+    void cannotDepositNegative(int amount){
         // given
         // 초기값 10000인 account 객체 새로 자동 생성
 
         // when && then
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> account.deposit(-1)
-        );
+        assertThatThrownBy(()->account.deposit(amount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입금액은 0원 이상이어야 합니다.");
+
     }
 
     // 정상출금
@@ -63,7 +67,7 @@ public class AccountTest {
         account.withdraw(3000);
 
         //then
-        assertEquals(7000,account.getBalance());
+        assertThat(account.getBalance()).isEqualTo(7000);
     }
 
     // 전액 출금
@@ -72,28 +76,27 @@ public class AccountTest {
 
         account.withdraw(10000);
 
-        assertEquals(0,account.getBalance());
+        assertThat(account.getBalance()).isEqualTo(0);
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(ints={10001,100001})
     @DisplayName("잔액 보다 큰 금액을 출금할 수 없다.")
-    void cannotWithdrawOverBalanceTest(){
+    void cannotWithdrawOverBalanceTest(int amount){
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> account.withdraw(10001)
-        );
-
-        assertEquals("잔액이 부족합니다.",exception.getMessage());
+        assertThatThrownBy(()->account.withdraw(amount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("잔액이 부족합니다.");
     }
 
     @Test
-    void cannotAmountZero(){
+    @DisplayName("0원을 출금할 수 없다")
+    void cannotWithdrawZero(){
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> account.withdraw(0)
-        );
+        assertThatThrownBy(()->account.withdraw(0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("출금 금액은 0보다 커야합니다.");
+
     }
 
     @ParameterizedTest
@@ -101,13 +104,9 @@ public class AccountTest {
     @DisplayName("출금 금액은 0보다 커야한다")
     void withdrawBiggerThanZero(int amount){
 
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> account.withdraw(amount)
-        );
-
-        assertEquals("출금 금액은 0보다 커야합니다.", exception.getMessage());
+        assertThatThrownBy(()->account.withdraw(amount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("출금 금액은 0보다 커야합니다.");
     }
 
 }

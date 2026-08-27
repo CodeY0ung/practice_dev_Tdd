@@ -17,11 +17,8 @@ public class Account {
     // 입금
     public void deposit(int amount){
 
-        if(amount == 0){
-            throw new IllegalArgumentException();
-        }
-        if(amount < 0){
-            throw new IllegalArgumentException();
+        if(amount <= 0){
+            throw new IllegalArgumentException("입금액은 0원 이상이어야 합니다.");
         }
 
 
