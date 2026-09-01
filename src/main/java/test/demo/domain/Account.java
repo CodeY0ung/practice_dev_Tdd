@@ -1,4 +1,4 @@
-package test.demo;
+package test.demo.domain;
 
 public class Account {
 

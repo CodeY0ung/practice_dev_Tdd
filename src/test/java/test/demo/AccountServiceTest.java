@@ -7,6 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import test.demo.domain.Account;
+import test.demo.exception.AccountNotFountException;
+import test.demo.repository.AccountRepository;
+import test.demo.service.AccountService;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,7 +54,7 @@ public class AccountServiceTest {
                 .thenReturn(null);
         //when&&then
         assertThatThrownBy(()->accountService.getAccount(999l))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(AccountNotFountException.class)
                 .hasMessage("계좌가 존재하지 않습니다.");
     }
 
@@ -78,7 +82,7 @@ public class AccountServiceTest {
                 .thenReturn(null);
         //when && then
         assertThatThrownBy(()->accountService.deposit(999l,5000))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(AccountNotFountException.class)
                 .hasMessage("계좌가 존재하지 않습니다.");
 
         verify(accountRepository, never()).save(any(Account.class));
@@ -185,7 +189,7 @@ public class AccountServiceTest {
                 .thenReturn(null);
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,3000))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(AccountNotFountException.class)
                 .hasMessage("계좌가 존재하지 않습니다.");
         verify(accountRepository, never()).save(any(Account.class));
     }

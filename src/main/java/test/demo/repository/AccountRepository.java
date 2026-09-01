@@ -1,4 +1,6 @@
-package test.demo;
+package test.demo.repository;
+
+import test.demo.domain.Account;
 
 public interface AccountRepository {
 
