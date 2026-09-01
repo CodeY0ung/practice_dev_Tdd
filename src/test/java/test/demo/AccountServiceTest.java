@@ -112,15 +112,11 @@ public class AccountServiceTest {
     void createAccountDoThrowTest(){
         //given
         //BeforeEach
-
-        //when
         doThrow(new RuntimeException("DB 오류"))
                 .when(accountRepository)
                 .save(account);
 
-
-
-        //then
+        //when && then
         assertThatThrownBy(()->accountService.createAccount(account))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("DB 오류");
