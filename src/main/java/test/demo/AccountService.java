@@ -26,6 +26,16 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    //입금
+    public void withdraw(Long id, int amount){
+        Account account = accountRepository.findById(id);
+        if(account==null){
+            throw new IllegalArgumentException("계좌가 존재하지 않습니다.");
+        }
+        account.withdraw(amount);
+        accountRepository.save(account);
+    }
+
     // 회원 등록
     public void createAccount(Account account){
         if(account.getBalance() < 0) {

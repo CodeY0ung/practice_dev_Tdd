@@ -8,8 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -101,6 +100,94 @@ public class AccountServiceTest {
         verify(accountRepository, never()).save(any(Account.class));
     }
 
+    // --------------------- 실습 2 -------------------------
 
+    @Test
+    @DisplayName("계좌에서 정상적으로 출금할 수 있다")
+    void withdrawTest(){
+        //given
+        //BeforeEach
+        when(accountRepository.findById(1L))
+                .thenReturn(account);
+        //when
+        accountService.withdraw(1L,3000);
+
+        //then
+        assertThat(account.getBalance()).isEqualTo(7000);
+        verify(accountRepository).save(account);
+
+    }
+
+    @Test
+    @DisplayName("잔액 전부를 출금할 수 있다")
+    void withdrawAllTest(){
+        //given
+        //BeforeEach
+        when(accountRepository.findById(1L))
+                .thenReturn(account);
+
+        //when
+        accountService.withdraw(1L,10000);
+
+        //then
+        assertThat(account.getBalance()).isEqualTo(0);
+        verify(accountRepository).save(account);
+    }
+
+    @Test
+    @DisplayName("잔액보다 많은 금액을 출금할 수 없다")
+    void cannotWithdrawOverThanBalance(){
+        //given
+        //BeforeEach
+        when(accountRepository.findById(1L))
+                .thenReturn(account);
+
+        //when&&then
+        assertThatThrownBy(()->accountService.withdraw(1L,10001))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("잔액이 부족합니다.");
+        verify(accountRepository, never()).save(any(Account.class));
+    }
+
+    @Test
+    @DisplayName("0원은 출금할 수 없다")
+    void cannotWithdrawMoreThanBalance(){
+        //given
+        //BeforeEach
+        when(accountRepository.findById(1L))
+                .thenReturn(account);
+        //when&&then
+        assertThatThrownBy(()->accountService.withdraw(1L,0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("출금 금액은 0보다 커야합니다.");
+        verify(accountRepository, never()).save(any(Account.class));
+    }
+
+    @Test
+    @DisplayName("음수는 출금할 수 없다")
+    void cannotWithdrawNegativeTest(){
+        //given
+        //BeforeEach
+        when(accountRepository.findById(1L))
+                .thenReturn(account);
+        //when&&then
+        assertThatThrownBy(()->accountService.withdraw(1L,-1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("출금 금액은 0보다 커야합니다.");
+        verify(accountRepository, never()).save(any(Account.class));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 계좌에서는 출금할 수 없다")
+    void cannotWithdrawFromNotExistAccountTest(){
+        //given
+        when(accountRepository.findById(1L))
+                .thenReturn(null);
+        //when&&then
+        assertThatThrownBy(()->accountService.withdraw(1L,3000))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("계좌가 존재하지 않습니다.");
+        verify(accountRepository, never()).save(any(Account.class));
+    }
 
 }

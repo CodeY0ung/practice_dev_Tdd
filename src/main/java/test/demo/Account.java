@@ -30,7 +30,7 @@ public class Account {
         if(amount > balance){
             throw new IllegalArgumentException("잔액이 부족합니다.");
         }
-        if(amount <= 0){
+        else if(amount <= 0){
             throw new IllegalArgumentException("출금 금액은 0보다 커야합니다.");
         }
         balance -= amount;
