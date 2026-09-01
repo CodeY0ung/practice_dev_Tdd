@@ -108,7 +108,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("createAccount - doTrow 테스트")
+    @DisplayName("createAccount - doThrow 테스트")
     void createAccountDoThrowTest(){
         //given
         //BeforeEach
@@ -117,6 +117,8 @@ public class AccountServiceTest {
         doThrow(new RuntimeException("DB 오류"))
                 .when(accountRepository)
                 .save(account);
+
+
 
         //then
         assertThatThrownBy(()->accountService.createAccount(account))
