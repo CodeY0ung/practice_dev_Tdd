@@ -17,7 +17,7 @@ public class AccountTest {
 
     @BeforeEach
     void setup(){
-        account = new Account(10000);
+        account = new Account(1l,10000);
     }
 
     @Test
