@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import test.demo.domain.Account;
 import test.demo.exception.AccountNotFountException;
+import test.demo.exception.InsufficientBalanceException;
+import test.demo.exception.InvalidAmountException;
 import test.demo.repository.AccountRepository;
 import test.demo.service.AccountService;
 
@@ -148,7 +150,7 @@ public class AccountServiceTest {
 
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,10001))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InsufficientBalanceException.class)
                 .hasMessage("잔액이 부족합니다.");
         verify(accountRepository, never()).save(any(Account.class));
     }
@@ -162,7 +164,7 @@ public class AccountServiceTest {
                 .thenReturn(account);
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,0))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InvalidAmountException.class)
                 .hasMessage("출금 금액은 0보다 커야합니다.");
         verify(accountRepository, never()).save(any(Account.class));
     }
@@ -176,7 +178,7 @@ public class AccountServiceTest {
                 .thenReturn(account);
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,-1))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InvalidAmountException.class)
                 .hasMessage("출금 금액은 0보다 커야합니다.");
         verify(accountRepository, never()).save(any(Account.class));
     }

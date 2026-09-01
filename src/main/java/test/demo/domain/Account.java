@@ -1,5 +1,8 @@
 package test.demo.domain;
 
+import test.demo.exception.InsufficientBalanceException;
+import test.demo.exception.InvalidAmountException;
+
 public class Account {
 
     private Long id;
@@ -28,10 +31,10 @@ public class Account {
     // 출금
     public void withdraw(int amount){
         if(amount > balance){
-            throw new IllegalArgumentException("잔액이 부족합니다.");
+            throw new InsufficientBalanceException("잔액이 부족합니다.");
         }
         else if(amount <= 0){
-            throw new IllegalArgumentException("출금 금액은 0보다 커야합니다.");
+            throw new InvalidAmountException("출금 금액은 0보다 커야합니다.");
         }
         balance -= amount;
     }
