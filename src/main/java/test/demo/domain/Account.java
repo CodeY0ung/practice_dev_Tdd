@@ -1,12 +1,24 @@
 package test.demo.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
 import test.demo.exception.InsufficientBalanceException;
 import test.demo.exception.InvalidAmountException;
 
+@Entity
 public class Account {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int balance;
+
+    protected Account(){
+
+    }
 
     public Account(Long id, int balance) {
         this.id = id;

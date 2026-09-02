@@ -1,10 +1,13 @@
 package test.demo.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import test.demo.domain.Account;
 
-public interface AccountRepository {
+import java.util.Optional;
 
-    Account findById(Long id);
+public interface AccountRepository extends JpaRepository<Account, Long> {
+
+    Optional<Account> findById(Long id);
 
     void save(Account account);
 
