@@ -14,6 +14,8 @@ import test.demo.exception.InvalidAmountException;
 import test.demo.repository.AccountRepository;
 import test.demo.service.AccountService;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +31,8 @@ public class AccountServiceTest {
     Account account;
     @BeforeEach
     void setUp(){
-        account = new Account(1l, 10000);
+        account = new Account(10000);
+
     }
 
     @Test
@@ -38,7 +41,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1l))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
 
         //when
         Account result = accountService.getAccount(1l);
@@ -65,7 +68,7 @@ public class AccountServiceTest {
     void depositTest(){
         //given
         //BeforeEach
-        when(accountRepository.findById(1l)).thenReturn(account);
+        when(accountRepository.findById(1l)).thenReturn(Optional.ofNullable(account));
 
         //when
         accountService.deposit(1l,5000);
@@ -96,7 +99,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(account.getId()))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
 
         //when&&then
         assertThatThrownBy(() -> accountService.deposit(account.getId(), 0))
@@ -114,7 +117,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1L))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
         //when
         accountService.withdraw(1L,3000);
 
@@ -130,7 +133,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1L))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
 
         //when
         accountService.withdraw(1L,10000);
@@ -146,7 +149,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1L))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
 
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,10001))
@@ -161,7 +164,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1L))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,0))
                 .isInstanceOf(InvalidAmountException.class)
@@ -175,7 +178,7 @@ public class AccountServiceTest {
         //given
         //BeforeEach
         when(accountRepository.findById(1L))
-                .thenReturn(account);
+                .thenReturn(Optional.ofNullable(account));
         //when&&then
         assertThatThrownBy(()->accountService.withdraw(1L,-1))
                 .isInstanceOf(InvalidAmountException.class)
