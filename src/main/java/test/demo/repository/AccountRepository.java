@@ -9,7 +9,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findById(Long id);
 
-    void save(Account account);
-
     void updateBalance(long id, int amount);
 }
