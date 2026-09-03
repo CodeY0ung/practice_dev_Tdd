@@ -13,29 +13,23 @@ public class AccountService {
 
     // 회원 조회
     public Account getAccount(Long id){
-        Account account = accountRepository.findById(id);
-        if(account==null){
-            throw new AccountNotFountException("계좌가 존재하지 않습니다.");
-        }
+        Account account = accountRepository.findById(id)
+                .orElseThrow(()-> new AccountNotFountException("계좌가 존재하지 않습니다."));
         return account;
     }
 
     // 입금
     public void deposit(Long id, int amount){
-        Account account = accountRepository.findById(id);
-        if (account == null){
-            throw new AccountNotFountException("계좌가 존재하지 않습니다.");
-        }
+        Account account = accountRepository.findById(id)
+                        .orElseThrow(()-> new AccountNotFountException("계좌가 존재하지 않습니다."));
         account.deposit(amount);
         accountRepository.save(account);
     }
 
     //입금
     public void withdraw(Long id, int amount){
-        Account account = accountRepository.findById(id);
-        if(account==null){
-            throw new AccountNotFountException("계좌가 존재하지 않습니다.");
-        }
+        Account account = accountRepository.findById(id)
+                .orElseThrow(()-> new AccountNotFountException("계좌가 존재하지 않습니다."));
         account.withdraw(amount);
         accountRepository.save(account);
     }
